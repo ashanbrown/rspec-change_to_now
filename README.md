@@ -24,17 +24,47 @@ And require it as:
 
 Use the `to_now` and `not_to_now` methods to make assertions about the effect of an rspec `change` block.
 
-    x = 1
-    expect { x += 1 }.to change { x }.to eq 2
+```ruby
+    expect { @x = 1 }.to change { @x }.to_now eq 1
+```
 
 and
 
-    x = 1
-    expect { x += 1 }.to change { x }.not_to eq 3
+```ruby
+    expect { @x = 1 }.to change { @x }.not_to eq 2
+```
 
-`to` will check both that the matcher is *does not* match prior to the change and that it *does* match after the change.  `not_to` and `to_note` will both do the opposite, ensuring that the matcher fails prior to the change, and matches only after the change. 
+The method `to_now` will check both that the matcher *does not* match prior to the change and that it *does* match after the change.  The method `not_to_now` (`not_to` for short) will do the opposite, ensuring that the matcher matches prior to the change, and fails only after the change.  All methods will ensure that a change actually takes place. 
 
-A few (or `not_to_now` or `to_not_now`) 
+Also supported are aliases for those who don't want to split their infinitives and for those who would like to differently split them:
+
+* `to_now` can also be called as `now_to`
+* `not_to_now` can also be called `not_to`, `to_not`, `to_not_now` and `not_now_to` 
+
+## Why is this useful?
+
+`change { }.from().to()` adds expectation of pre- and post-conditions for a change, but it is restricted only to object values.  With `to_now`, you can write
+
+```ruby
+    list = []
+    expect { list << :a }.to change { list }.to_now include :a
+```
+
+ whereas previously you would have to fully specify the original and final values of the list: 
+
+```ruby
+    list = []
+    expect { list << :a }.to change { list }.from([]).to([:a])
+```
+
+While that may not seem like a big deal, the real values comes in more complex statements like:
+
+```ruby
+    person = Person.create(name: 'Taylor')
+    expect { person.siblings.create(name: 'Sam') }.to change { Person.all.map(&:name) }.to_now include('Taylor')
+```
+
+Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
 ## Contributing
 
