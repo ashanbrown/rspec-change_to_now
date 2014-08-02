@@ -70,7 +70,7 @@ module RSpec
 
       def check_arguments
         return block_and_arguments_together_failure_message if has_both_block_and_arguments?
-        @actual = @actual.to_h if @restore_hash
+        @actual = Hash[@actual] if @restore_hash
         nil
       end
     end
