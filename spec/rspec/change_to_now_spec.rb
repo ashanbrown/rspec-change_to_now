@@ -18,13 +18,8 @@ module RSpec
       end
       it "fails without an expectation block" do
         expect {
-          expect(1).to change { number }.to_now eq 2
+          expect(1).to change { }.to_now eq 2
         }.to fail_matching("was not given a block")
-      end
-      it "fails when the argument is not a matcher" do
-        expect {
-          expect { }.to change { number }.to_now 2
-        }.to fail_matching("to be a matcher but got")
       end
       it "fails when the final expectation is never met" do
         number = 1
@@ -32,7 +27,7 @@ module RSpec
           expect {
             number += 1
           }.to change { number }.to_now eq 3
-        }.to fail_matching(/After the change.*got: 2/m)
+        }.to fail_matching("expected result to have changed to eq 3, but is now 2")
       end
       it "fails when the final expectation is already met" do
         number = 2
@@ -40,7 +35,7 @@ module RSpec
           expect {
             number += 1
           }.to change { number }.to_now eq 2
-        }.to fail_matching(/Before the change.*got: 2/m)
+        }.to fail_matching("expected result to have initially been ~(eq 2), but was 2")
       end
     end
 
@@ -56,14 +51,14 @@ module RSpec
         expect {
           expect {
           }.to change { number }.not_to eq 1
-        }.to fail_matching("did not change")
+        }.to fail_matching("expected result to have changed to ~(eq 1) from eq 1, but did not change")
       end
       it "fails when the final expectation is already met" do
         number = 2
         expect {
           expect {
           }.to change { number }.not_to eq 1
-        }.to fail_matching(/Before the change.*got: 2/m)
+        }.to fail_matching("expected result to have initially been eq 1, but was 2")
       end
       it "fails when the final expectation is never met" do
         number = 2
@@ -71,7 +66,7 @@ module RSpec
           expect {
             number = 4
           }.to change { number }.not_to satisfy(&:even?)
-        }.to fail_matching(/After the change.*not to satisfy/m)
+        }.to fail_matching("expected result to have changed to ~(satisfy block), but is now 4")
       end
     end
 
