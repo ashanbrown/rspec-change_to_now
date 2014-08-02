@@ -49,6 +49,12 @@ module RSpec
         @block.nil?
       end
 
+      # @api private
+      # @return [String]
+      def description
+        super.gsub(/^include/, 'detect')
+      end
+
       private
 
       def block_and_arguments_together_failure_message
@@ -82,9 +88,7 @@ module RSpec
     #   expect({a: 2}).to detect { |k,v| v.even? }
     #   expect([1]).to detect 1
     def detect(*expected, &block)
-      AliasedMatcher.new(Detect.new(*expected, &block), lambda do |old_desc|
-        old_desc.gsub(Pretty.split_words('include'), Pretty.split_words('detect'))
-      end)
+      Detect.new(*expected, &block)
     end
   end
 end

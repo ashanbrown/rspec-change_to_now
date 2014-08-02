@@ -10,7 +10,7 @@ RSpec.describe "#detect matcher" do
       it "fails if target does not detect expected" do
         expect {
           expect([1,3]).to detect(&:even?)
-        }.to fail_matching("expected [1, 3] to include (satisfy block)")
+        }.to fail_matching("expected [1, 3] to detect (satisfy block)")
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe "#detect matcher" do
       it "fails if target does not detect expected" do
         expect {
           expect({:key => 1}).to detect { |key,value| value.even? }
-        }.to fail_matching("expected {:key => 1} to include (satisfy block)")
+        }.to fail_matching("expected {:key => 1} to detect (satisfy block)")
       end
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe "#detect matcher" do
       it "fails if target does not detect expected" do
         expect {
           expect([1,3]).not_to detect(&:odd?)
-        }.to fail_matching("expected [1, 3] not to include (satisfy block)")
+        }.to fail_matching("expected [1, 3] not to detect (satisfy block)")
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe "#detect matcher" do
       it "fails if target does not detect expected" do
         expect {
           expect({:key => 1}).not_to detect { |key,value| value.odd? }
-        }.to fail_matching("expected {:key => 1} not to include (satisfy block)")
+        }.to fail_matching("expected {:key => 1} not to detect (satisfy block)")
       end
     end
   end
