@@ -88,14 +88,14 @@ This gem also adds the `detect` matcher, which behaves like the `include` matche
 
 ```ruby
     list = []
-    expect { list << 1 }.to change { list }.to detect(&:even?)
+    expect { list << 2 }.to change { list }.to detect(&:even?)
 ```
 
 This is the same as:
 
 ```ruby
     list = []
-    expect { list << 1 }.to change { list }.to include satisfy(&:even?)
+    expect { list << 2 }.to change { list }.to include satisfy(&:even?)
 ```
 
 A more interesting use might be:
