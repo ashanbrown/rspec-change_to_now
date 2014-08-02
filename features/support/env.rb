@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 'aruba/cucumber'
 require 'rspec/core'
 require 'rspec/change_to_now'

@@ -1,5 +1,7 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 'rspec/change_to_now'
-require 'rspec/mocks'
 
 Dir['./spec/support/**/*'].each {|f| require f}
 
