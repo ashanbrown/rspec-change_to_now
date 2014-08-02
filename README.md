@@ -1,16 +1,16 @@
 # RSpec::ChangeToNow [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
 
-RSpec::ChangeTo provides the `to_now` and `not_to_now` methods to `change` matcher to describe expectations of changes in state using matchers.
+RSpec::ChangeTo adds the `to_now` and `not_to_now` methods to `change` matcher to describe how executing a block should change a matcher expectation.
 
 ## Usage
 
-Use the `to_now` and `not_to_now` methods to make assertions about the effect of an rspec `change` block.
+Use the `to_now` and `not_to_now` (or `not_to`, for short) methods to make assertions about the effect of an rspec `change` block:
 
 ```ruby
     expect { @x = 1 }.to change { @x }.to_now eq 1
 ```
 
-and
+or
 
 ```ruby
     expect { @x = 1 }.to change { @x }.not_to eq 2
@@ -66,9 +66,24 @@ While that may not seem like a big deal, the real values comes in more complex s
 
 Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
-## `detect(&block)` matcher
+## Additional Matchers Provided
 
-This gem also augments `detect` to take a block, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
+This gem also provides some additional matchers as detailed below.
+
+### `negate(&block)`
+
+This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
+
+
+```ruby
+    expect(1).to negate(ne(1))
+```
+
+While it doesn't read every well, it serves an internal purpose, allowing a very simple implementation of `to_now` using composable matcher inputs to the `from` and `to` methods as [added in rspec 3.0](http://myronmars.to/n/dev-blog/2014/01/new-in-rspec-3-composable-matchers).
+
+### `detect(&block)`
+
+This gem also adds the `detect` matcher, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
 
 
 ```ruby
@@ -94,14 +109,7 @@ A more interesting use might be:
     }
 ```
 
-## `negate(&block)` matcher
-
-For internal purposes, this gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
-
-
-```ruby
-    expect(1).to negate(ne(1))
-```
+`detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
 ## Contributing
 
