@@ -1,6 +1,6 @@
 # RSpec::ChangeToNow [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
 
-RSpec::ChangeTo provides the `to_now` and `not_to_now` methods to `change` matcher to create expectactions on changes in matchers.
+RSpec::ChangeTo provides the `to_now` and `not_to_now` methods to `change` matcher to describe expectations of changes in state using matchers.
 
 ## Usage
 
