@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'aruba',    '~> 0.5'
   spec.add_development_dependency 'coveralls', '~> 0.5'
   spec.add_development_dependency 'gem-release', '~> 0.7.3'
+  spec.add_development_dependency 'codeclimate-test-reporter', '~> 0.4.0'
 end
