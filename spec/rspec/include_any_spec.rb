@@ -10,7 +10,7 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include expected" do
         expect {
           expect([1,3]).to include(&:even?)
-        }.to fail_matching("expected one of 1 and 3 to satisfy block")
+        }.to fail_matching("expected [1, 3] to include (satisfy block)")
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include expected" do
         expect {
           expect({:key => 1}).to include { |key,value| value.even? }
-        }.to fail_matching("expected one of [:key, 1] to satisfy block")
+        }.to fail_matching("expected {:key => 1} to include (satisfy block)")
       end
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include expected" do
         expect {
           expect([1,3]).not_to include(&:odd?)
-        }.to fail_matching("expected none of 1 and 3 to satisfy block")
+        }.to fail_matching("expected [1, 3] not to include (satisfy block)")
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include expected" do
         expect {
           expect({:key => 1}).not_to include { |key,value| value.odd? }
-        }.to fail_matching("expected none of [:key, 1] to satisfy block")
+        }.to fail_matching("expected {:key => 1} not to include (satisfy block)")
       end
     end
   end

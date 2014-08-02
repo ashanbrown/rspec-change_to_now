@@ -68,15 +68,22 @@ Arguably, I should be injecting some dependencies here instead of relying on glo
 
 ## `include(&block)` matcher
 
-This gem also augments `include` to take a block, so it behaves like `satisfy` over an enumerable.  You can use it like so:
+This gem also augments `include` to take a block, which behaves like `satisfy` on the block.  You can use it like so:
 
 
 ```ruby
     list = []
-    expect { list << 1 }.to change { list }.to include?(&:even?)
+    expect { list << 1 }.to change { list }.to include(&:even?)
 ```
 
-Or more interestingly:
+This is the same as:
+
+```ruby
+    list = []
+    expect { list << 1 }.to change { list }.to include satisfy(&:even?)
+```
+
+A more interesting use might be:
 
 ```ruby
     person = Person.create(name: 'Taylor')

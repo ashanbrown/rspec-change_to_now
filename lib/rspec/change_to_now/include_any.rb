@@ -14,61 +14,41 @@ module RSpec
 
       # @api private
       # @return [Boolean]
-      def matches?(actual, &block)
+      def matches?(actual)
         @actual = actual
-        @block ||= block
-        if @block
-          perform_match_for_block
-        else
-          perform_match(:all?, :all?)
-        end
+        perform_match(:all?, :all?)
       end
 
       # @api private
       # @return [Boolean]
-      def does_not_match?(actual, &block)
+      def does_not_match?(actual)
         @actual = actual
-        @block ||= block
-        if @block
-          perform_match_for_block(true)
-        else
-          perform_match(:none?, :any?)
-        end
+        perform_match(:none?, :any?)
       end
 
-      # @api private
-      # @return [String]
-      def description
+      def perform_match(predicate, hash_subset_predicate)
         if @block
-          "include block"
-        else
-          super
+          block_matcher = RSpec::Matchers::BuiltIn::Satisfy.new(&@block)
+          if @actual.is_a?(Hash)
+            @actual = @actual.to_a
+            @restore_hash = true
+          end
+          @expected << block_matcher
         end
+        return false if has_both_block_and_arguments?
+        super
       end
 
       # @api private
       # @return [String]
       def failure_message
-        if @block
-          return block_and_arguments_together_failure_message unless @expected.empty?
-          described_items = surface_descriptions_in(@actual)
-          improve_hash_formatting "expected one of#{to_sentence(described_items)} to satisfy block"
-        else
-          super
-        end
+        check_arguments || super
       end
 
       # @api private
       # @return [String]
       def failure_message_when_negated
-        @block && !@expected.nil?
-        if @block
-          return block_and_arguments_together_failure_message unless @expected.empty?
-          described_items = surface_descriptions_in(@actual)
-          improve_hash_formatting "expected none of#{to_sentence(described_items)} to satisfy block"
-        else
-          super
-        end
+        check_arguments || super
       end
 
       # @api private
@@ -83,18 +63,14 @@ module RSpec
         "include can take arguments or a block but not both"
       end
 
-      def invalid_type_message
-        if @block
-          return '' unless respond_to?(:detect)
-          ", but it does not respond to `detect`"
-        else
-          super
-        end
+      def has_both_block_and_arguments?
+        @block && @expected.length > 1
       end
 
-      def perform_match_for_block(negate = false)
-        return false if !@expected.empty?
-        @actual.respond_to?(:detect) && (!@actual.detect(&@block).nil? ^ negate)
+      def check_arguments
+        return block_and_arguments_together_failure_message if has_both_block_and_arguments?
+        @actual = @actual.to_h if @restore_hash
+        nil
       end
     end
 
