@@ -8,36 +8,27 @@ module RSpec
     # Not intended to be instantiated directly.
     class Detect < BuiltIn::Include
       def initialize(*expected, &block)
-        @expected = expected
-        @block = block
-        @restore_hash = false
+        if @block = block
+          block_matcher = RSpec::Matchers::BuiltIn::Satisfy.new(&block)
+          expected << block_matcher
+        end
+        super(*expected)
       end
 
       # @api private
       # @return [Boolean]
       def matches?(actual)
-        @actual = actual
-        perform_match(:all?, :all?)
+        handle_arguments_for_match(actual) do |new_actual|
+          super(new_actual)
+        end
       end
 
       # @api private
       # @return [Boolean]
       def does_not_match?(actual)
-        @actual = actual
-        perform_match(:none?, :any?)
-      end
-
-      def perform_match(predicate, hash_subset_predicate)
-        if @block
-          block_matcher = RSpec::Matchers::BuiltIn::Satisfy.new(&@block)
-          if @actual.is_a?(Hash)
-            @actual = @actual.to_a
-            @restore_hash = true
-          end
-          @expected << block_matcher
+        handle_arguments_for_match(actual) do |new_actual|
+          super(new_actual)
         end
-        return false if has_both_block_and_arguments?
-        super
       end
 
       # @api private
@@ -61,7 +52,7 @@ module RSpec
       private
 
       def block_and_arguments_together_failure_message
-        "include can take arguments or a block but not both"
+        "detect can take arguments or a block but not both"
       end
 
       def has_both_block_and_arguments?
@@ -69,9 +60,16 @@ module RSpec
       end
 
       def check_arguments
-        return block_and_arguments_together_failure_message if has_both_block_and_arguments?
-        @actual = Hash[@actual] if @restore_hash
-        nil
+        block_and_arguments_together_failure_message if has_both_block_and_arguments?
+      end
+
+      def handle_arguments_for_match(actual)
+        return false if has_both_block_and_arguments?
+        original_actual = actual
+        actual = actual.to_a if @block && actual.is_a?(Hash)
+        value = yield(actual)
+        @actual = original_actual
+        value
       end
     end
 
