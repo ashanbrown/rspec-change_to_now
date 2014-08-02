@@ -1,12 +1,12 @@
-# RSpec::ChangeTo [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
+# RSpec::ChangeToNow [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
 
-RSpec::ChangeTo provides the `to`, `not_to` and `to_not` methods to `change` matcher to describe changes in the conditions
+RSpec::ChangeTo provides the `to_now` and `not_to_now` methods to `change` matcher to create expectactions on changes in matchers.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'rspec-change_to'
+    gem 'rspec-change_to_now'
 
 And then execute:
 
