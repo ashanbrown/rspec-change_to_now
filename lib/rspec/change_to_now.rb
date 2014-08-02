@@ -1,4 +1,5 @@
 require 'rspec/change_to_now/version'
+require 'rspec/change_to_now/include_any'
 require 'rspec/core'
 require 'rspec/expectations'
 

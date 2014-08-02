@@ -66,6 +66,29 @@ While that may not seem like a big deal, the real values comes in more complex s
 
 Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
+## `include(&block)` matcher
+
+This gem also augments `include` to take a block, so it behaves like `satisfy` over an enumerable.  You can use it like so:
+
+
+```ruby
+    list = []
+    expect { list << 1 }.to change { list }.to include?(&:even?)
+```
+
+Or more interestingly:
+
+```ruby
+    person = Person.create(name: 'Taylor')
+    expect { person.siblings.create(name: 'Sam') }.to change {
+      Person.all
+    }.to_now include { |person|
+      person.name == 'Taylor'
+    }
+```
+
+It is also aliased as `include_any`.
+
 ## Contributing
 
 1. Fork it
