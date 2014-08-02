@@ -2,3 +2,6 @@
 .ruby*
 tmp
 .yardoc
+doc
+coverage
+Gemfile.lock
