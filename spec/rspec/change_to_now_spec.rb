@@ -14,7 +14,7 @@ module RSpec
         expect {
           expect {
           }.to change { number }.to_now eq 2
-        }.to fail_matching("did not change")
+        }.to fail_matching("expected result to have changed to eq 2 from ~(eq 2), but did not change")
       end
       it "fails without an expectation block" do
         expect {
