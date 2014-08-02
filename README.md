@@ -66,14 +66,14 @@ While that may not seem like a big deal, the real values comes in more complex s
 
 Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
-## `include(&block)` matcher
+## `detect(&block)` matcher
 
-This gem also augments `include` to take a block, which behaves like `satisfy` on the block.  You can use it like so:
+This gem also augments `detect` to take a block, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
 
 
 ```ruby
     list = []
-    expect { list << 1 }.to change { list }.to include(&:even?)
+    expect { list << 1 }.to change { list }.to detect(&:even?)
 ```
 
 This is the same as:
@@ -89,12 +89,10 @@ A more interesting use might be:
     person = Person.create(name: 'Taylor')
     expect { person.siblings.create(name: 'Sam') }.to change {
       Person.all
-    }.to_now include { |person|
+    }.to_now detect { |person|
       person.name == 'Taylor'
     }
 ```
-
-It is also aliased as `include_any`.
 
 ## Contributing
 

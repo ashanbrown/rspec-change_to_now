@@ -1,7 +1,6 @@
 
-  describe "adding one" do
-    it "adds one" do
-      x = 1
-      expect { x += 1 }.to change { x }.to_now eq 3
+    describe "detecting even numbers" do
+      it "fails for odd numbers" do
+        expect([1]).to detect(&:even?)
+      end
     end
-  end

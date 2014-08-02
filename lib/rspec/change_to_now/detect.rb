@@ -6,7 +6,7 @@ module RSpec
     # @api private
     # Provides the implementation for `include`.
     # Not intended to be instantiated directly.
-    class IncludeAny < BuiltIn::Include
+    class Detect < BuiltIn::Include
       def initialize(*expected, &block)
         @expected = expected
         @block = block
@@ -75,11 +75,10 @@ module RSpec
       end
     end
 
-    def include_any(*args, &block)
-      IncludeAny.new(*args, &block)
+    def detect(*args, &block)
+      AliasedMatcher.new(Detect.new(*args, &block), lambda do |old_desc|
+        old_desc.gsub(Pretty.split_words('include'), Pretty.split_words('detect'))
+      end)
     end
-
-    alias_method :include_original, :include
-    alias_method :include, :include_any
   end
 end
