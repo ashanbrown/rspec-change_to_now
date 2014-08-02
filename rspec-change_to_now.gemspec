@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake',     '~> 10.1.0'
   spec.add_development_dependency 'aruba',    '~> 0.5'
   spec.add_development_dependency 'coveralls', '~> 0.5'
+  spec.add_development_dependency 'gem-release', '~> 0.7.3'
 end
