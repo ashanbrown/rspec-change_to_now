@@ -1,4 +1,4 @@
-# RSpec::ChangeToNow ([rdocs](http://rubydoc.info/github/dontfidget/rspec-change_to_now/)) [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
+# RSpec::ChangeToNow [`rdoc`](http://rubydoc.info/github/dontfidget/rspec-change_to_now/) [![Build Status](https://travis-ci.org/dontfidget/rspec-change_to_now.png)](https://travis-ci.org/dontfidget/rspec-change_to_now)
  [![Code Climate](https://codeclimate.com/github/dontfidget/rspec-change_to_now/badges/gpa.svg)](https://codeclimate.com/github/dontfidget/rspec-change_to_now)
  [![Dependency Status](https://gemnasium.com/dontfidget/rspec-change_to_now.svg)](https://gemnasium.com/dontfidget/rspec-change_to_now)
 
