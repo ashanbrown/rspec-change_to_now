@@ -33,7 +33,7 @@ module RSpec
         if @matcher.respond_to? :failure_message_when_negated
           @matcher.failure_message_when_negated
         elsif @matcher.respond_to :description
-          "expected #{surface_descriptions_in @actual} not to #{surface_descriptions_in @matcher}"
+          "expected #{surface_descriptions_in(@actual).inspect} not to #{surface_descriptions_in(@matcher).inspect}"
         end
       end
 
@@ -44,7 +44,7 @@ module RSpec
 
       # @private
       def description
-        "not #{surface_descriptions_in @matcher}"
+        "~#{surface_descriptions_in(@matcher).inspect}"
       end
 
       # @private
