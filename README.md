@@ -2,24 +2,6 @@
 
 RSpec::ChangeTo provides the `to_now` and `not_to_now` methods to `change` matcher to create expectactions on changes in matchers.
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'rspec-change_to_now'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install rspec-change_to_now
-
-And require it as:
-
-    require 'rspec/change_to_now'
-
 ## Usage
 
 Use the `to_now` and `not_to_now` methods to make assertions about the effect of an rspec `change` block.
@@ -40,6 +22,24 @@ Also supported are aliases for those who don't want to split their infinitives a
 
 * `to_now` can also be called as `now_to`
 * `not_to_now` can also be called `not_to`, `to_not`, `to_not_now` and `not_now_to` 
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'rspec-change_to_now'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install rspec-change_to_now
+
+And require it as:
+
+    require 'rspec/change_to_now'
 
 ## Why is this useful?
 
