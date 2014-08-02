@@ -10,6 +10,7 @@ module RSpec
       def initialize(*expected, &block)
         @expected = expected
         @block = block
+        @restore_hash = false
       end
 
       # @api private
@@ -74,10 +75,11 @@ module RSpec
       end
     end
 
-    def include(*args, &block)
+    def include_any(*args, &block)
       IncludeAny.new(*args, &block)
     end
 
-    alias_matcher :include_any, :include
+    alias_method :include_original, :include
+    alias_method :include, :include_any
   end
 end

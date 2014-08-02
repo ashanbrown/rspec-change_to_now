@@ -76,6 +76,10 @@ module RSpec
     end
 
     describe "aliases" do
+      before do
+        @x = nil
+      end
+
       it "specify #now_to is the same as #to_now" do
         expect { @x = 1 }.to change { @x }.now_to eq 1
       end
