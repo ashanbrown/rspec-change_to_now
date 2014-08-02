@@ -35,15 +35,15 @@ module RSpec
       def failure_message
         if @matcher.respond_to? :failure_message_when_negated
           @matcher.failure_message_when_negated
-        elsif @matcher.respond_to :description
-          "expected #{surface_descriptions_in(@actual).inspect} not to #{surface_descriptions_in(@matcher).inspect}"
+        elsif @matcher.respond_to? :description
+          "expected #{surface_descriptions_in(@matcher.actual).inspect} not to #{surface_descriptions_in(@matcher).inspect}"
         end
       end
 
       # @api private
       # @return [String]
       def failure_message_when_negated
-        failure_message
+        @matcher.failure_message
       end
 
       # @api private
