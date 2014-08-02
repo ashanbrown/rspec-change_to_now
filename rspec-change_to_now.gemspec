@@ -20,8 +20,10 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'rspec-core', '>= 3.0.0'
   spec.add_runtime_dependency 'rspec-expectations', '>= 3.0.0'
+  spec.add_development_dependency 'rspec-mocks', '>= 3.0.0'
   spec.add_development_dependency 'cucumber', '~> 1.3.8'
   spec.add_development_dependency 'bundler',  '~> 1.3'
   spec.add_development_dependency 'rake',     '~> 10.1.0'
   spec.add_development_dependency 'aruba',    '~> 0.5'
+  spec.add_development_dependency 'coveralls', '~> 0.5'
 end
