@@ -25,4 +25,4 @@ Feature: detect matcher
       """
     When I run rspec
     Then the output should contain "Failure/Error: expect([1]).to detect(&:even?)"
-      And the output should contain "expected [1] to include (satisfy block)"
+      And the output should contain "expected [1] to detect (satisfy block)"
