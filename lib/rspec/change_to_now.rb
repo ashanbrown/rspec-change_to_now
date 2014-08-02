@@ -1,5 +1,6 @@
 require 'rspec/change_to_now/version'
 require 'rspec/change_to_now/detect'
+require 'rspec/change_to_now/negate'
 require 'rspec/core'
 require 'rspec/expectations'
 

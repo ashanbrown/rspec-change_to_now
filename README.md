@@ -94,6 +94,15 @@ A more interesting use might be:
     }
 ```
 
+## `negate(&block)` matcher
+
+For internal purposes, this gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
+
+
+```ruby
+    expect(1).to negate(ne(1))
+```
+
 ## Contributing
 
 1. Fork it
