@@ -64,8 +64,10 @@ module RSpec::Matchers
     # @api public
     alias_method :to_not_now, :not_to_now
 
+    # @private
     alias_method :to_without_to_now, :to
 
+    # @private
     def to_with_to_now(expected)
       if RSpec::Matchers::ChangeToNow.override_to && RSpec::Matchers.is_a_matcher?(expected)
         to_now(expected)
@@ -74,6 +76,7 @@ module RSpec::Matchers
       end
     end
 
+    # @private
     alias_method :to, :to_with_to_now
   end
 
