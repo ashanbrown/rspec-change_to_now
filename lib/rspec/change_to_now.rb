@@ -72,6 +72,27 @@ module RSpec::Matchers
     end
   end
 
+  class BuiltIn::ChangeFromValue
+    def to_now(matcher)
+      RSpec::Matchers::BuiltIn::ChangeToValue.new(
+        @change_details,
+        verify_argument_is_matcher(matcher)
+      ).from(@expected_before)
+    end
+
+    def not_to_now(matcher)
+      RSpec::Matchers::BuiltIn::ChangeToValue.new(
+        @change_details,
+        negate(verify_argument_is_matcher(matcher))
+      ).from(@expected_before)
+    end
+
+    # @private
+    def verify_argument_is_matcher(matcher)
+      RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
+    end
+  end
+
   class ChangeToNow
     class << self
       attr_accessor :override_to

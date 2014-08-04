@@ -45,6 +45,42 @@ module RSpec
           }.to change { }.to_now 2
         }.to raise_error SyntaxError, /expects a matcher as an argument/
       end
+
+      describe "after #from" do
+        it "passes without running the default inverse precondition check" do
+          list = nil
+          expect {
+            list = []
+          }.to change { list }.from(nil).to_now satisfy(&:empty?)
+        end
+
+        it "fails if the initial condition does not match" do
+          expect {
+            list = nil
+            expect {
+              list = []
+            }.to change { list }.from(1).to_now satisfy(&:empty?)
+          }.to fail_matching("expected result to have initially been 1, but was nil")
+        end
+      end
+
+      describe "before #from" do
+        it "passes without running the default inverse precondition check" do
+          list = nil
+          expect {
+            list = []
+          }.to change { list }.to_now(satisfy(&:empty?)).from(nil)
+        end
+
+        it "fails if the initial condition does not match" do
+          expect {
+            list = nil
+            expect {
+              list = []
+            }.to change { list }.to_now(satisfy(&:empty?)).from(1)
+          }.to fail_matching("expected result to have initially been 1, but was nil")
+        end
+      end
     end
 
     describe "#not_to_now" do
