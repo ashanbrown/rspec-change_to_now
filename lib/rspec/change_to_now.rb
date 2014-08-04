@@ -65,15 +65,16 @@ module RSpec::Matchers
     alias_method :to_not_now, :not_to_now
 
     alias_method :to_without_to_now, :to
-    alias_method :to_with_to_now, :to
 
-    def to(expected)
+    def to_with_to_now(expected)
       if RSpec::Matchers::ChangeToNow.override_to && RSpec::Matchers.is_a_matcher?(expected)
         to_now(expected)
       else
         to_without_to_now(expected)
       end
     end
+
+    alias_method :to, :to_with_to_now
   end
 
   class BuiltIn::ChangeFromValue
