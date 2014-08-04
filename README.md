@@ -38,23 +38,23 @@ There are a couple of ways to prevent precondition checks if you don't want them
 
 1. Use `with_final_result` instead of `to_now` to check your results.  e.g.
 
-```ruby
-it "initializes an empty list" do
-  list = nil
-  expect { list = [] }.with_final_result satisfy(&:empty)  
-end
-```
+    ```ruby
+    it "initializes an empty list" do
+      list = nil
+      expect { list = [] }.with_final_result satisfy(&:empty)  
+    end
+    ```
 
-2. Explicitly specify a `from` value or matcher, either before or after your `to_now` statement:
+1. Explicitly specify a `from` value or matcher, either before or after your `to_now` statement:
 
-```ruby
-it "initializes an empty list" do
-  list = nil
-  expect { list = [] }.from(nil).to_now satisfy(&:empty)
-  list = nil
-  expect { list = [] }.to_now satisfy(&:empty).from(nil)  
-end
-```
+    ```ruby
+    it "initializes an empty list" do
+      list = nil
+      expect { list = [] }.from(nil).to_now satisfy(&:empty)
+      list = nil
+      expect { list = [] }.to_now satisfy(&:empty).from(nil)  
+    end
+    ```
 
 ## Installation
 
