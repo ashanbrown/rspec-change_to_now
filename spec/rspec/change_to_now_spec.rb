@@ -113,5 +113,73 @@ module RSpec
         end
       end
     end
+
+    describe "when #to has been overridden by the configuration setting" do
+      before do
+        allow(RSpec::Matchers::ChangeToNow).to receive(:override_to).and_return(true)
+      end
+
+      it "fails when the final expectation is already met" do
+        number = 2
+        expect {
+          expect {
+            number += 1
+          }.to change { number }.to eq 2
+        }.to fail_matching("expected result to have initially been ~(eq 2), but was 2")
+      end
+
+      it "still works with basic object matchers" do
+        number = 2
+        expect {
+          expect {
+            number += 1
+          }.to change { number }.to 2
+        }.to fail_matching("expected result to have changed to 2, but is now 3")
+      end
+
+      describe "if #from is specified first" do
+        let(:matcher) { change { @number }.from(1).to(eq 2) }
+
+        it "fails properly when the precondition is not met" do
+          @number = 2
+          expect {
+            expect {
+              @number += 1
+            }.to matcher
+          }.to fail_matching("expected result to have initially been 1, but was 2")
+        end
+
+        it "runs the change check if the precondition is met" do
+          @number = 1
+          expect {
+            expect {
+              @number += 2
+            }.to matcher
+          }.to fail_matching("expected result to have changed to eq 2, but is now 3")
+        end
+      end
+
+      describe "if #from is specified after #to" do
+        let(:matcher) { change { @number }.to(eq 2).from(1) }
+
+        it "fails properly when the precondition is not met" do
+          @number = 2
+          expect {
+            expect {
+              @number += 1
+            }.to matcher
+          }.to fail_matching("expected result to have initially been 1, but was 2")
+        end
+
+        it "runs the change check if the precondition is met" do
+          @number = 1
+          expect {
+            expect {
+              @number += 2
+            }.to matcher
+          }.to fail_matching("expected result to have changed to eq 2, but is now 3")
+        end
+      end
+    end
   end
 end

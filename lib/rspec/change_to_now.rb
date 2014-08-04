@@ -48,6 +48,17 @@ module RSpec::Matchers
     # @api public
     alias_method :to_not_now, :not_to_now
 
+    alias_method :to_without_to_now, :to
+    alias_method :to_with_to_now, :to
+
+    def to(expected)
+      if RSpec::Matchers::ChangeToNow.override_to && RSpec::Matchers.is_a_matcher?(expected)
+        to_now(expected)
+      else
+        to_without_to_now(expected)
+      end
+    end
+
     private
 
     # @private
@@ -58,6 +69,12 @@ module RSpec::Matchers
     # @private
     def verify_argument_is_matcher(matcher)
       RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
+    end
+  end
+
+  class ChangeToNow
+    class << self
+      attr_accessor :override_to
     end
   end
 end
