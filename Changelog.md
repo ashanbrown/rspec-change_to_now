@@ -1,3 +1,8 @@
+### 1.1.0
+
+* Add `with_final_result` matcher that doesn't do precondition test
+* Correctly support `to_now` alongside `from` 
+
 ### 1.0.3
 
 Refer to 'detect' instead of 'include' in messages for detect matcher. 
