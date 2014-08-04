@@ -6,7 +6,23 @@ require 'rspec/core'
 require 'rspec/expectations'
 
 module RSpec::Matchers
+  module ChangeToNowMatchers
+    private
+
+    # @private
+    def negate(matcher)
+      RSpec::Matchers::Negate.new(matcher)
+    end
+
+    # @private
+    def verify_argument_is_matcher(matcher)
+      RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
+    end
+  end
+
   class BuiltIn::Change
+    include ChangeToNowMatchers
+
     # @api public
     # Passes if +matcher+ fails on the result of the change block before the expectation block and passes after.
     #
@@ -58,21 +74,11 @@ module RSpec::Matchers
         to_without_to_now(expected)
       end
     end
-
-    private
-
-    # @private
-    def negate(matcher)
-      RSpec::Matchers::Negate.new(matcher)
-    end
-
-    # @private
-    def verify_argument_is_matcher(matcher)
-      RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
-    end
   end
 
   class BuiltIn::ChangeFromValue
+    include ChangeToNowMatchers
+
     def to_now(matcher)
       RSpec::Matchers::BuiltIn::ChangeToValue.new(
         @change_details,
@@ -85,11 +91,6 @@ module RSpec::Matchers
         @change_details,
         negate(verify_argument_is_matcher(matcher))
       ).from(@expected_before)
-    end
-
-    # @private
-    def verify_argument_is_matcher(matcher)
-      RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
     end
   end
 
