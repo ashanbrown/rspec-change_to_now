@@ -1,6 +1,7 @@
 require 'rspec/change_to_now/version'
 require 'rspec/change_to_now/detect'
 require 'rspec/change_to_now/negate'
+require 'rspec/change_to_now/verify_argument_is_matcher'
 require 'rspec/core'
 require 'rspec/expectations'
 
@@ -18,7 +19,8 @@ module RSpec::Matchers
     #   change {}.to_now eq(1)
     #   change {}.from(negate(eq(1))).to(eq(1))
     def to_now(matcher)
-      RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, matcher).from(negate(matcher))
+      RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, verify_argument_is_matcher(matcher)).
+        from(negate(verify_argument_is_matcher(matcher)))
     end
 
     # @api public
@@ -27,7 +29,8 @@ module RSpec::Matchers
     # @example
     #   expect({ @x = 1 }.to change { @x }.not_to_now eq 1
     def not_to_now(matcher)
-      RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, negate(matcher)).from(matcher)
+      RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, negate(verify_argument_is_matcher(matcher))).
+        from(verify_argument_is_matcher(matcher))
     end
 
     # @api public
@@ -50,6 +53,11 @@ module RSpec::Matchers
     # @private
     def negate(matcher)
       RSpec::Matchers::Negate.new(matcher)
+    end
+
+    # @private
+    def verify_argument_is_matcher(matcher)
+      RSpec::Matchers::VerifyArgumentIsMatcher.new(matcher)
     end
   end
 end

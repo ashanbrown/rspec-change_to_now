@@ -37,27 +37,35 @@ module RSpec
           }.to change { number }.to_now eq 2
         }.to fail_matching("expected result to have initially been ~(eq 2), but was 2")
       end
+      it "raises an error when not passed a matcher" do
+        number = 1
+        expect {
+          expect {
+            number += 1
+          }.to change { }.to_now 2
+        }.to raise_error SyntaxError, /expects a matcher as an argument/
+      end
     end
 
-    describe "#not_to" do
+    describe "#not_to_now" do
       it "succeeds when the final expectation is met" do
         number = 1
         expect {
           number += 2
-        }.to change { number }.not_to eq 1
+        }.to change { number }.not_to_now eq 1
       end
       it "fails when there is no change" do
         number = 1
         expect {
           expect {
-          }.to change { number }.not_to eq 1
+          }.to change { number }.not_to_now eq 1
         }.to fail_matching("expected result to have changed to ~(eq 1) from eq 1, but did not change")
       end
       it "fails when the final expectation is already met" do
         number = 2
         expect {
           expect {
-          }.to change { number }.not_to eq 1
+          }.to change { number }.not_to_now eq 1
         }.to fail_matching("expected result to have initially been eq 1, but was 2")
       end
       it "fails when the final expectation is never met" do
@@ -65,8 +73,16 @@ module RSpec
         expect {
           expect {
             number = 4
-          }.to change { number }.not_to satisfy(&:even?)
+          }.to change { number }.not_to_now satisfy(&:even?)
         }.to fail_matching("expected result to have changed to ~(satisfy block), but is now 4")
+      end
+      it "raises an error when not passed a matcher" do
+        number = 1
+        expect {
+          expect {
+            number += 1
+          }.to change { }.not_to_now 2
+        }.to raise_error SyntaxError, /expects a matcher as an argument/
       end
     end
 
@@ -80,7 +96,7 @@ module RSpec
       end
 
       describe "negative cases" do
-        specify "#to_not is the same as #not_to" do
+        specify "#to_not is the same as #not_to_now" do
           expect { @x = 1 }.to change { @x }.to_not eq nil
         end
 
