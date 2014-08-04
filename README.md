@@ -144,36 +144,6 @@ A more interesting use might be:
 
 `detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
-### `detect(&block)`
-
-This gem also adds the `detect` matcher, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
-
-
-```ruby
-    list = []
-    expect { list << 2 }.to change { list }.to detect(&:even?)
-```
-
-This is the same as:
-
-```ruby
-    list = []
-    expect { list << 2 }.to change { list }.to include satisfy(&:even?)
-```
-
-A more interesting use might be:
-
-```ruby
-    person = Person.create(name: 'Taylor')
-    expect { person.siblings.create(name: 'Sam') }.to change {
-      Person.all
-    }.to_now detect { |person|
-      person.name == 'Taylor'
-    }
-```
-
-`detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
-
 ## Contributing
 
 1. Fork it
