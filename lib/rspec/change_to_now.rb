@@ -78,6 +78,11 @@ module RSpec::Matchers
 
     # @private
     alias_method :to, :to_with_to_now
+
+    # @api public
+    def with_final_result(expected)
+      to_without_to_now(expected)
+    end
   end
 
   class BuiltIn::ChangeFromValue
@@ -95,6 +100,10 @@ module RSpec::Matchers
         @change_details,
         negate(verify_argument_is_matcher(matcher))
       ).from(@expected_before)
+    end
+
+    def with_final_result(expected)
+      to_without_to_now(expected)
     end
   end
 

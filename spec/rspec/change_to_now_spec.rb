@@ -186,6 +186,42 @@ module RSpec
       end
     end
 
+    describe "#with_final_result" do
+      before do
+        @x = nil
+      end
+
+      it "checks only the post condition not the precondition" do
+        expect { @x = [] }.to change { @x }.with_final_result satisfy(&:empty?)
+      end
+      describe "when passed an object" do
+        it "passes when the final object equals the result" do
+          expect { @x = 1 }.to change { @x }.with_final_result 1
+        end
+        it "fails when the final object does not equal the result" do
+          expect {
+            expect { @x = 1 }.to change { @x }.with_final_result 2
+          }.to fail_matching("expected result to have changed to 2, but is now 1")
+        end
+      end
+
+      it "behaves exactly like the original #to method" do
+        matcher = change { @x }
+        matcher_mock = double()
+        expect(matcher).to receive(:to_without_to_now).with(1).and_return(matcher_mock)
+        expect(matcher.with_final_result 1).to eq matcher_mock
+      end
+        
+      describe "after #from" do
+        it "behaves exactly like the original #to method" do
+          matcher = change { @x }.from 0
+          matcher_mock = double()
+          expect(matcher).to receive(:to_without_to_now).with(1).and_return(matcher_mock)
+          expect(matcher.with_final_result 1).to eq matcher_mock
+        end
+      end
+    end
+
     describe "when #to has been overridden by the configuration setting" do
       before do
         allow(RSpec::Matchers::ChangeToNow).to receive(:override_to).and_return(true)

@@ -23,6 +23,39 @@ Also supported are aliases for those who don't want to split their infinitives a
 * `to_now` can also be called as `now_to`
 * `not_to_now` can also be called `not_to`, `to_not`, `to_not_now` and `not_now_to` 
 
+## Overriding default RSpec behavior
+
+You can force the rspec `change` matcher to always use `to_now` instead of `to` by setting:
+
+```ruby
+RSpec::Matchers::ChangeToNow.override_to = true
+```
+
+
+## Testing without preconditions
+
+There are a couple of ways to prevent precondition checks if you don't want them for a particular expectation:
+
+1. Use `with_final_result` instead of `to_now` to check your results.  e.g.
+
+```ruby
+it "initializes an empty list" do
+  list = nil
+  expect { list = [] }.with_final_result satisfy(&:empty)  
+end
+```
+
+2. Explicitly specify a `from` value or matcher, either before or after your `to_now` statement:
+
+```ruby
+it "initializes an empty list" do
+  list = nil
+  expect { list = [] }.from(nil).to_now satisfy(&:empty)
+  list = nil
+  expect { list = [] }.to_now satisfy(&:empty).from(nil)  
+end
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -80,6 +113,36 @@ This gem also introduces the `negate` matcher, which negates an existing matcher
 ```
 
 While it doesn't read every well, it serves an internal purpose, allowing a very simple implementation of `to_now` using composable matcher inputs to the `from` and `to` methods as [added in rspec 3.0](http://myronmars.to/n/dev-blog/2014/01/new-in-rspec-3-composable-matchers).
+
+### `detect(&block)`
+
+This gem also adds the `detect` matcher, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
+
+
+```ruby
+    list = []
+    expect { list << 2 }.to change { list }.to detect(&:even?)
+```
+
+This is the same as:
+
+```ruby
+    list = []
+    expect { list << 2 }.to change { list }.to include satisfy(&:even?)
+```
+
+A more interesting use might be:
+
+```ruby
+    person = Person.create(name: 'Taylor')
+    expect { person.siblings.create(name: 'Sam') }.to change {
+      Person.all
+    }.to_now detect { |person|
+      person.name == 'Taylor'
+    }
+```
+
+`detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
 ### `detect(&block)`
 
