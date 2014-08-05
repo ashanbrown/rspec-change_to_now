@@ -108,7 +108,7 @@ This gem also provides some additional matchers as detailed below.  Only the `de
 RSpec.configure { |c|.include RSpec::ChangeToNow::Matchers::DSL }
 ```
 
-### `negate(&block)` (not included automatically)
+### `negate(&block)` (*not included automatically*)
 
 This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
 
@@ -148,7 +148,7 @@ A more interesting use might be:
 
 `detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
-### `matcher_only(matcher) (not included automatically)`
+### `matcher_only(matcher)` (*not included automatically*)
 
 The `match_only` matcher just passes the given matcher through unless it is not a matcher, in which case it raises a syntax error.  While this would pass:
 
