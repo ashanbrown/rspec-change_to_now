@@ -43,7 +43,7 @@ While I'd assert that in most conditions, the automatic precondition checks intr
     ```ruby
     it "initializes an empty list" do
       list = nil
-      expect { list = [] }.with_final_result satisfy(&:empty)  
+      expect { list = [] }.to change { list }.with_final_result satisfy(&:empty)  
     end
     ```
 
@@ -52,7 +52,7 @@ While I'd assert that in most conditions, the automatic precondition checks intr
     ```ruby
     it "initializes an empty list" do
       list = nil
-      expect { list = [] }.from(nil).to_now satisfy(&:empty)
+      expect { list = [] }.to change { list }.from(nil).to_now satisfy(&:empty)
       list = nil
       expect { list = [] }.to_now satisfy(&:empty).from(nil)  
     end
