@@ -125,67 +125,67 @@ This gem also provides some additional matchers as detailed below.  Only the `de
 RSpec.configure { |c|.include RSpec::ChangeToNow::Matchers::DSL }
 ```
 
-### `negate(&block)` (optional)
+* `negate(&block)` *(optional)*
 
-This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
+    This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
 
 
-```ruby
-    expect(1).to negate(ne(1))
-```
+    ```ruby
+        expect(1).to negate(ne(1))
+    ```
+    
+    While it doesn't read every well, it serves an internal purpose, allowing a very simple implementation of `to_now` using composable matcher inputs to the `from` and `to` methods as [added in rspec 3.0](http://myronmars.to/n/dev-blog/2014/01/new-in-rspec-3-composable-matchers).
+    
+* `detect(&block)`
 
-While it doesn't read every well, it serves an internal purpose, allowing a very simple implementation of `to_now` using composable matcher inputs to the `from` and `to` methods as [added in rspec 3.0](http://myronmars.to/n/dev-blog/2014/01/new-in-rspec-3-composable-matchers).
+    The `detect` matcher behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
+    
+    ```ruby
+        list = []
+        expect { list << 2 }.to change { list }.to detect(&:even?)
+    ```
+    
+    This is the same as:
+    
+    ```ruby
+        list = []
+        expect { list << 2 }.to change { list }.to include satisfy(&:even?)
+    ```
+    
+    A more interesting use might be:
+    
+    ```ruby
+        person = Person.create(name: 'Taylor')
+        expect { person.siblings.create(name: 'Sam') }.to change {
+          Person.all
+        }.to_now detect { |person|
+          person.name == 'Taylor'
+        }
+    ```
 
-### `detect(&block)`
+    `detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
-The `detect` matcher behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
+* `matcher_only(matcher)` *(optional)*
 
-```ruby
-    list = []
-    expect { list << 2 }.to change { list }.to detect(&:even?)
-```
+    The `match_only` matcher just passes the given matcher through unless it is not a matcher, in which case it raises a syntax error.  While this would pass:
 
-This is the same as:
+    ```ruby
+        expect(1).to matcher_only(eq(1))
+    ```
+    
+    this would fail with a syntax error:
+    
+    ```ruby
+        expect(1).to matcher_only(1)
+    ```
+    
+* `as_matcher(expected)` *(optional)*
 
-```ruby
-    list = []
-    expect { list << 2 }.to change { list }.to include satisfy(&:even?)
-```
-
-A more interesting use might be:
-
-```ruby
-    person = Person.create(name: 'Taylor')
-    expect { person.siblings.create(name: 'Sam') }.to change {
-      Person.all
-    }.to_now detect { |person|
-      person.name == 'Taylor'
-    }
-```
-
-`detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
-
-### `matcher_only(matcher)` (optional)
-
-The `match_only` matcher just passes the given matcher through unless it is not a matcher, in which case it raises a syntax error.  While this would pass:
-
-```ruby
-    expect(1).to matcher_only(eq(1))
-```
-
-this would fail with a syntax error:
-
-```ruby
-    expect(1).to matcher_only(1)
-```
-
-### `as_matcher(expected)` (optional)
-
-The `as_matcher` matcher just passes the given matcher through unless it is not a matcher, in which case it returns a new matcher created using `match(expected)`.  So, for example, this would work:
-
-```ruby
-    expect(1).to as_matcher(1)
-```
+    The `as_matcher` matcher just passes the given matcher through unless it is not a matcher, in which case it returns a new matcher created using `match(expected)`.  So, for example, this would work:
+    
+    ```ruby
+        expect(1).to as_matcher(1)
+    ```
 
 ## Contributing
 
