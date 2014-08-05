@@ -1,6 +1,6 @@
-require_relative '../spec_helper'
+require_relative 'spec_helper'
 
-RSpec.describe "#detect matcher" do
+describe "detect" do
   describe "expect(...).to detect(&with_block)" do
     context "for an array target" do
       it "passes if target detects expected" do

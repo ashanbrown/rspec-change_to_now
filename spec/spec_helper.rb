@@ -17,4 +17,5 @@ end
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.order = 'random'
+  config.include RSpec::ChangeToNow::Matchers::DSL
 end

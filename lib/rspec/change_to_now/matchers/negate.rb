@@ -2,13 +2,13 @@ require 'rspec/core'
 require 'rspec/expectations'
 
 module RSpec
-  module Matchers
+  module ChangeToNow::Matchers
     # @api private
     # Provides the implementation for `negate`.
     # Not intended to be instantiated directly.
     class Negate
-      include Composable
-      include Pretty
+      include RSpec::Matchers::Composable
+      include RSpec::Matchers::Pretty
 
       def initialize(matcher)
         @matcher = matcher
@@ -57,15 +57,6 @@ module RSpec
       def supports_block_expectations?
         @matcher.supports_block_expectations?
       end
-    end
-
-    # Passes if provided +matcher+ fails and vice-versa.
-    #
-    # @example
-    #   expect([1]).to negate(eq(2))
-    #   expect([1]).not_to negate(eq(1))
-    def negate(matcher)
-      Negate.new(matcher)
     end
   end
 end

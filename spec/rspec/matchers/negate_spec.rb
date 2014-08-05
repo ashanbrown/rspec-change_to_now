@@ -1,6 +1,6 @@
-require_relative '../spec_helper'
+require_relative 'spec_helper'
 
-RSpec.describe RSpec::Matchers::Negate do
+describe "negate" do
   describe "with literal expectations" do
     describe "when not negated" do
       describe "when the original matcher provides :does_not_match?" do

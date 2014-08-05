@@ -46,7 +46,7 @@ Feature: expecting a matcher to change
   Scenario: overriding RSpec `change { }.to` to behave like `change { }.to_now`
     Given a file named "example_spec.rb" with:
       """ruby
-        RSpec::Matchers::ChangeToNow.override_to = true
+        RSpec::ChangeToNow.override_to = true
 
         describe "adding one" do
           it "adds one" do

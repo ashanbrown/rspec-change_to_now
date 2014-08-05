@@ -43,7 +43,7 @@ module RSpec
           expect {
             number += 1
           }.to change { }.to_now 2
-        }.to raise_error SyntaxError, /expects a matcher as an argument/
+        }.to raise_error SyntaxError, /expected a matcher as an argument/
       end
 
       describe "after #from" do
@@ -118,7 +118,7 @@ module RSpec
           expect {
             number += 1
           }.to change { }.not_to_now 2
-        }.to raise_error SyntaxError, /expects a matcher as an argument/
+        }.to raise_error SyntaxError, /expected a matcher as an argument/
       end
 
       describe "after #from" do
@@ -224,7 +224,7 @@ module RSpec
 
     describe "when #to has been overridden by the configuration setting" do
       before do
-        allow(RSpec::Matchers::ChangeToNow).to receive(:override_to).and_return(true)
+        allow(RSpec::ChangeToNow).to receive(:override_to).and_return(true)
       end
 
       it "fails when the final expectation is already met" do

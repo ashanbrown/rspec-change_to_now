@@ -28,7 +28,7 @@ Also supported are aliases for those who don't want to split their infinitives a
 You can force the rspec `change` matcher to always use `to_now` instead of `to` by setting:
 
 ```ruby
-RSpec::Matchers::ChangeToNow.override_to = true
+RSpec::ChangeToNow.override_to = true
 ```
 
 
@@ -101,9 +101,14 @@ Arguably, I should be injecting some dependencies here instead of relying on glo
 
 ## Additional Matchers Provided
 
-This gem also provides some additional matchers as detailed below.
+This gem also provides some additional matchers as detailed below.  Only the `detect` matcher is automatically added to the rspec DSL when `rspec/change_to_now` is required.  To get the other matchers, add this line to your `spec_helper.rb`:
 
-### `negate(&block)`
+```ruby
+# spec_helper.rb
+RSpec.configure { |c|.include RSpec::ChangeToNow::Matchers::DSL }
+```
+
+### `negate(&block)` (not included automatically)
 
 This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
 
@@ -116,8 +121,7 @@ While it doesn't read every well, it serves an internal purpose, allowing a very
 
 ### `detect(&block)`
 
-This gem also adds the `detect` matcher, which behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
-
+The `detect` matcher behaves like the `include` matcher when passed a `satisfy` matcher created using the given block.  You can use it like so:
 
 ```ruby
     list = []
@@ -143,6 +147,20 @@ A more interesting use might be:
 ```
 
 `detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
+
+### `matcher_only(matcher) (not included automatically)`
+
+The `match_only` matcher just passes the given matcher through unless it is not a matcher, in which case it raises a syntax error.  While this would pass:
+
+```ruby
+    expect(1).to matcher_only(eq(1))
+```
+
+this would fail with a syntax error:
+
+```ruby
+    expect(1).to matcher_only(1)
+```
 
 ## Contributing
 

@@ -3,6 +3,7 @@ Feature: negating a matcher
   Scenario: when the matcher is negated
     Given a file named "example_spec.rb" with:
     """ruby
+        include RSpec::ChangeToNow::Matchers::DSL
 
         describe "testing equality" do
           it "is the same as negated inequality" do
@@ -16,6 +17,7 @@ Feature: negating a matcher
   Scenario: failures are correctly reported
     Given a file named "example_spec.rb" with:
     """ruby
+        include RSpec::ChangeToNow::Matchers::DSL
 
         describe "testing equality" do
           it "fails if the the negated matcher does match" do
