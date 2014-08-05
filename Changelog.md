@@ -1,3 +1,8 @@
+### 1.2.0
+
+* Make it easy to include `negate` and `matcher_only` matchers.
+* Move RSpec::Matchers::ChangeToNow.override_to setting to RSpec::ChangeToNow.override_to
+
 ### 1.1.0
 
 * Add `with_final_result` matcher that doesn't do precondition test
