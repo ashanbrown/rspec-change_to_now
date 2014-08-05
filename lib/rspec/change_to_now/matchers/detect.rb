@@ -70,7 +70,7 @@ module RSpec::ChangeToNow
       end
 
       def handle_arguments_for_match(actual)
-        return false if has_both_block_and_arguments?
+        raise SyntaxError, block_and_arguments_together_failure_message if has_both_block_and_arguments?
         original_actual = actual
         actual = actual.to_a if @block && actual.is_a?(Hash)
         value = yield(actual)

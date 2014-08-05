@@ -57,7 +57,7 @@ describe "detect" do
     it "fails with a message" do
       expect {
         expect([0, 1]).to detect(0) { true }
-      }.to fail_matching(%Q{can take arguments or a block but not both})
+      }.to raise_error SyntaxError, "detect can take arguments or a block but not both"
     end
   end
 
@@ -65,7 +65,7 @@ describe "detect" do
     it "fails with a message" do
       expect {
         expect([0, 1]).not_to detect(0) { true }
-      }.to fail_matching(%Q{can take arguments or a block but not both})
+      }.to raise_error SyntaxError, "detect can take arguments or a block but not both"
     end
   end
 end
