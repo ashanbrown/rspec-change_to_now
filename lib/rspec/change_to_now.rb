@@ -20,8 +20,8 @@ module RSpec
       #   change {}.to_now eq(1)
       #   change {}.from(negate(eq(1))).to(eq(1))
       def to_now(matcher)
-        RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, matcher_only(matcher)).
-          from(negate(matcher_only(matcher)))
+        RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, as_matcher(matcher)).
+          from(negate(as_matcher(matcher)))
       end
 
       # @api public
@@ -30,8 +30,8 @@ module RSpec
       # @example
       #   expect({ @x = 1 }.to change { @x }.not_to_now eq 1
       def not_to_now(matcher)
-        RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, negate(matcher_only(matcher))).
-          from(matcher_only(matcher))
+        RSpec::Matchers::BuiltIn::ChangeToValue.new(@change_details, negate(as_matcher(matcher))).
+          from(as_matcher(matcher))
       end
 
       # @api public

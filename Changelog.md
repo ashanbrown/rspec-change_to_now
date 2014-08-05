@@ -3,6 +3,7 @@
 * Make it easy to include `negate` and `matcher_only` matchers.
 * Move `RSpec::Matchers::ChangeToNow.override_to` setting to `RSpec::ChangeToNow.override_to`
 * When passed both arguments and a block, `detect` will raise a `SyntaxError` instead of `ExpectationNotMet`
+* When passed an object that is not a matcher, `to_now` will behave like `to`, albeit reporting precondition failures.
 
 ### 1.1.0
 

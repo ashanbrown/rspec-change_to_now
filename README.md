@@ -24,7 +24,7 @@ Also supported are aliases for those who don't want to split their infinitives a
 
 ## How *exactly* does it work?
 
-The method `to_now` will check both that the matcher *does not* match prior to the change and that it *does* match after the change.  The method `not_to_now` (`not_to` for short) will do the opposite, ensuring that the matcher matches prior to the change, and fails only after the change.  All methods will ensure that a change actually takes place. 
+The method `to_now` will check both that the expected value *does not* match prior to the change and that it *does* match after the change.  The method `not_to_now` (`not_to` for short) will do the opposite, ensuring that the expected value does matche prior to the change, and fails only after the change.  Both methods will ensure that a change actually takes place.
 
 ## Globally overriding default RSpec behavior for `to` with `to_now`
 
@@ -101,7 +101,22 @@ While that may not seem like a big deal, the real values comes in more complex s
 
 Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
-## Additional Matchers Provided: *negate*, *detect* and *matcher_only*  
+Finally, *change_to_now* causes inferred pre-condition tests, to be explicitly reported.  For example,
+
+```ruby
+number = 2
+expect {
+  number += 1
+}.to change { number }.to_now 2
+```
+
+will report:
+ 
+    expected result to have initially passed ~(match 2), but was 2
+    
+If set up *change_to_now* to_now to globally override `change {}. to`, then even `to` will report this way.
+
+## Additional Matchers Provided: *negate*, *detect*, *matcher_only* and *as_matcher*  
 
 This gem also provides some additional matchers as detailed below.  Only the `detect` matcher is automatically added to the rspec DSL when `rspec/change_to_now` is required.  To get the other matchers, add this line to your `spec_helper.rb`:
 
@@ -162,6 +177,14 @@ this would fail with a syntax error:
 
 ```ruby
     expect(1).to matcher_only(1)
+```
+
+### `as_matcher(expected)` (optional)
+
+The `as_matcher` matcher just passes the given matcher through unless it is not a matcher, in which case it returns a new matcher created using `match(expected)`.  So, for example, this would work:
+
+```ruby
+    expect(1).to as_matcher(1)
 ```
 
 ## Contributing

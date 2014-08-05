@@ -37,13 +37,13 @@ module RSpec
           }.to change { number }.to_now eq 2
         }.to fail_matching("expected result to have initially been ~(eq 2), but was 2")
       end
-      it "raises an error when not passed a matcher" do
-        number = 1
+      it "reports an error about the precondition if passed a non-matcher object" do
+        number = 2
         expect {
           expect {
             number += 1
-          }.to change { }.to_now 2
-        }.to raise_error SyntaxError, /expected a matcher as an argument/
+          }.to change { number }.to_now 2
+        }.to fail_matching("expected result to have initially been ~(match 2), but was 2")
       end
 
       describe "after #from" do
@@ -112,13 +112,13 @@ module RSpec
           }.to change { number }.not_to_now satisfy(&:even?)
         }.to fail_matching("expected result to have changed to ~(satisfy block), but is now 4")
       end
-      it "raises an error when not passed a matcher" do
+      it "reports an error about the precondition if passed a non-matcher object" do
         number = 1
         expect {
           expect {
             number += 1
           }.to change { }.not_to_now 2
-        }.to raise_error SyntaxError, /expected a matcher as an argument/
+        }.to fail_matching("expected result to have initially been match 2, but was nil")
       end
 
       describe "after #from" do

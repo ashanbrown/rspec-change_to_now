@@ -11,6 +11,12 @@ module RSpec::ChangeToNow::Matchers::DSL
     RSpec::ChangeToNow::Matchers::Negate.new(matcher)
   end
 
+  # @api public
+  # Returns a matcher that behaves like the +matcher+ if passed a matcher, otherwise like match(+matcher+)
+  def as_matcher(expected)
+    RSpec::ChangeToNow::Matchers::AsMatcher.new(expected)
+  end
+
   module Detect
     # @api public
     # If given a block, passes if the block returns a truthy value for any of the actual items or for the key-value pair is the actual item list is a hash.
