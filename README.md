@@ -4,26 +4,29 @@ RSpec::ChangeTo adds the `to_now` and `not_to_now` methods to `change` matcher t
 
 ## Usage
 
-Use the `to_now` and `not_to_now` (or `not_to`, for short) methods to make assertions about the effect of an rspec `change` block:
+Use the `to_now` and `not_to_now` (or `not_to`, for short) methods to make assertions about the effect of an rspec `change` block rather than just the final state:
 
 ```ruby
-    expect { @x = 1 }.to change { @x }.to_now eq 1
+    expect { @x -= [1] }.to change { @x }.not_to include 1
 ```
 
-or
+Conversely, an example like this, which passes on rspec 3.0, would fail:
 
 ```ruby
-    expect { @x = 1 }.to change { @x }.not_to eq 2
+@x = [1]  
+expect { @x << 1 }.to change { @x }.to_now include 1
 ```
-
-The method `to_now` will check both that the matcher *does not* match prior to the change and that it *does* match after the change.  The method `not_to_now` (`not_to` for short) will do the opposite, ensuring that the matcher matches prior to the change, and fails only after the change.  All methods will ensure that a change actually takes place. 
 
 Also supported are aliases for those who don't want to split their infinitives and for those who would like to differently split them:
 
 * `to_now` can also be called as `now_to`
 * `not_to_now` can also be called `not_to`, `to_not`, `to_not_now` and `not_now_to` 
 
-## Overriding default RSpec behavior
+## How *exactly* does it work?
+
+The method `to_now` will check both that the matcher *does not* match prior to the change and that it *does* match after the change.  The method `not_to_now` (`not_to` for short) will do the opposite, ensuring that the matcher matches prior to the change, and fails only after the change.  All methods will ensure that a change actually takes place. 
+
+## Globally overriding default RSpec behavior for `to` with `to_now`
 
 You can force the rspec `change` matcher to always use `to_now` instead of `to` by setting:
 
@@ -31,10 +34,9 @@ You can force the rspec `change` matcher to always use `to_now` instead of `to` 
 RSpec::ChangeToNow.override_to = true
 ```
 
-
 ## Testing without preconditions
 
-There are a couple of ways to prevent precondition checks if you don't want them for a particular expectation:
+While I'd assert that in most conditions, the automatic precondition checks introduced by `to_now` would be helpful, you may find yourself wanting to disable them for some expectations.  Here are a couple of ways to prevent precondition checks:
 
 1. Use `with_final_result` instead of `to_now` to check your results.  e.g.
 
@@ -76,7 +78,7 @@ And require it as:
 
 ## Why is this useful?
 
-`change { }.from().to()` adds expectation of pre- and post-conditions for a change, but it is restricted only to object values.  With `to_now`, you can write
+When passed object values as expectations, `change { }.from().to()` fails as if it has pre- and post-condition checks.  However, when a passed matcher to `to`, it will not check the inverse condition prior to the change.  With `to_now`, you can write:
 
 ```ruby
     list = []
@@ -99,7 +101,7 @@ While that may not seem like a big deal, the real values comes in more complex s
 
 Arguably, I should be injecting some dependencies here instead of relying on globals, but Rails code doesn't always look like that.  I'm looking forward to playing around with this and seeing if it really helps simplify specs.  I'd love to hear your feedback.
 
-## Additional Matchers Provided
+## Additional Matchers Provided: *negate*, *detect* and *matcher_only*  
 
 This gem also provides some additional matchers as detailed below.  Only the `detect` matcher is automatically added to the rspec DSL when `rspec/change_to_now` is required.  To get the other matchers, add this line to your `spec_helper.rb`:
 
@@ -108,7 +110,7 @@ This gem also provides some additional matchers as detailed below.  Only the `de
 RSpec.configure { |c|.include RSpec::ChangeToNow::Matchers::DSL }
 ```
 
-### `negate(&block)` (*not included automatically*)
+### `negate(&block)` (optional)
 
 This gem also introduces the `negate` matcher, which negates an existing matcher.  You can use it like so:
 
@@ -148,7 +150,7 @@ A more interesting use might be:
 
 `detect` behaves exactly like `include` when it is not passed a block and will raise an exception if passed both expected items/matchers and a block.
 
-### `matcher_only(matcher)` (*not included automatically*)
+### `matcher_only(matcher)` (optional)
 
 The `match_only` matcher just passes the given matcher through unless it is not a matcher, in which case it raises a syntax error.  While this would pass:
 
